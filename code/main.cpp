@@ -1,3 +1,18 @@
+/***************************************************************************
+    begin                : Sep 21 2013
+    copyright            : (C) 2013 Mirko Montanari
+    email                : 57454@studenti.unimore.it
+ ***************************************************************************/
+
+/***************************************************************************
+ *                                                                         *
+ *   This program is free software for non commercial purpose              *
+ *   and for public research institutes; you can redistribute it and/or    *
+ *   modify it under the terms of the GNU General Public License.          *
+ *   For commercial purpose see appropriate license terms                  *
+ *                                                                         *
+ ***************************************************************************/
+
 #include <Freeze/Freeze.h>
 #include "MapByteSeq.h"
 #include "MapFixedSeq.h"
@@ -5,24 +20,35 @@
 #include "MapStringSeq.h"
 #include <iostream>
 #include <ctime>
+#include <db.h>
+#include <db_cxx.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+
+#define NCYCLES 100
 
 using namespace std;
 
-//calcola il tempo occorso per l'operazione richiesta
-double calcola_differenza(clock_t fine, clock_t inizio){
-	double difft = fine-inizio;
-	double diffms = 1000*(difft)/(CLOCKS_PER_SEC);
-	return diffms;
-}
-
 int main(int argc, char* argv[]){
-	//inizializzo la connessione ice
+
+	timeval start, stop;
+	double elapsedTime;
+
+	//initialize che Ice communicator
 	Ice::CommunicatorPtr communicator = Ice::initialize(argc,argv);
 
-	//creo un freeze database
+	//create the Freeze's db with the BDB in disk
 	Freeze::ConnectionPtr connection = Freeze::createConnection(communicator, "db");
+
+	//create the Freeze's db on memory
+	/*
+	DbEnv env(0);
+	u_int32_t flags = DB_INIT_LOG | DB_INIT_MPOOL | DB_INIT_TXN | DB_CREATE | DB_THREAD | DB_RECOVER | DB_INIT_LOCK | DB_LOCKDOWN | DB_SYSTEM_MEM | DB_PRIVATE;
+	env.open("db", flags, S_IRUSR | S_IWUSR);
+	Freeze::ConnectionPtr connection = Freeze::createConnection(communicator, "db",env);
+	*/
 	
-	//inizializzo le mappe
+	//initialize the maps
 	MapByteSeq mapByte(connection, "ByteSeq");
 	mapByte.clear();
 	MapFixedSeq mapFixed(connection, "FixedSeq");
@@ -34,84 +60,100 @@ int main(int argc, char* argv[]){
 
 	//---------ByteSeq----------------------------------------------------
 	Demo::ByteSeq bSeq;
-	clock_t inizio = clock();
-	//popolo la sequenza di byte
-	for(Ice::Int i=0; i<100; i++){
+	gettimeofday(&start, NULL);
+	//create the sequence of bye
+	for(Ice::Int i=0; i<NCYCLES; i++){
 		bSeq.clear();
 		for(int k=0; k<Demo::ByteSeqSize; k++)
 			bSeq.push_back((Ice::Byte)(i%256));
 		mapByte.insert(make_pair(i,bSeq));
 	}
-	clock_t fine = clock();
-	std::cout << "Scrittura 100 ByteSeq: " << calcola_differenza(fine,inizio) << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for write one ByteSeq: " << elapsedTime/NCYCLES << " ms" << std::endl;
 
-	//leggo il db dei byteseq
+	//reade the byte's db
 	MapByteSeq::iterator p1;
-	inizio = clock();
+	gettimeofday(&start, NULL);
 	for(p1=mapByte.begin(); p1!=mapByte.end(); ++p1)
 		Demo::ByteSeq tmp = p1->second;
-	fine = clock();
-	std::cout << "Lettura 100 ByteSeq: " << calcola_differenza(fine,inizio) << std::endl << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for read one ByteSeq: " << elapsedTime/NCYCLES << "ms" << std::endl << std::endl;
 
 	//-----------FixedSeq--------------------------------------------------
 	Demo::Fixed fix;
-	inizio = clock();
-	//popolo la sequenza di fixed
-	for(Ice::Int i=0; i<100; ++i){
+	gettimeofday(&start, NULL);
+	//create the fixed's sequence and save in the db
+	for(Ice::Int i=0; i<NCYCLES; ++i){
 		fix.i = i;
 		fix.j = i;
 		fix.d = (Ice::Double)i;
 		mapFixed.insert(make_pair(i,fix));
 	}
-	fine = clock();
-	std::cout << "Scrittura 100 Fixed: " << calcola_differenza(fine,inizio) << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for write one Fixed: " << elapsedTime/NCYCLES << "ms" << std::endl;
 
-	//leggo il db dei fixed
+	//read the fixed's db
 	MapFixedSeq::iterator p2;
-	inizio = clock();
+	gettimeofday(&start, NULL);
 	for(p2=mapFixed.begin(); p2!=mapFixed.end(); ++p2)
 		Demo::Fixed tmp = p2->second;
-	fine = clock();
-	std::cout << "Lettura 100 Fixed: " << calcola_differenza(fine,inizio) << std::endl << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for read one Fixed: " << elapsedTime/NCYCLES << "ms" << std::endl << std::endl;
 
 	//-----------StringDouble--------------------------------------------------
 	Demo::StringDouble strdo;
-	inizio = clock();
-	//popolo la sequenza di stringdouble
-	for(Ice::Int i=0; i<100; ++i){
+	gettimeofday(&start, NULL);
+	//create the stringdouble sequence
+	for(Ice::Int i=0; i<NCYCLES; ++i){
 		strdo.s = "prova";
 		strdo.d = (Ice::Double)i;
 		mapStrDo.insert(make_pair(i,strdo));
 	}
-	fine = clock();
-	std::cout << "Scrittura 100 StringDouble: " << calcola_differenza(fine,inizio) << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for write one StringDouble: " << elapsedTime/NCYCLES << "ms" << std::endl;
 
-	//leggo il db dei stringdouble
+	//reade the stringdouble db
 	MapStringDouble::iterator p3;
-	inizio = clock();
+	gettimeofday(&start, NULL);
 	for(p3=mapStrDo.begin(); p3!=mapStrDo.end(); ++p3)
 		Demo::StringDouble tmp = p3->second;
-	fine = clock();
-	std::cout << "Lettura 100 StringDouble: " << calcola_differenza(fine,inizio) << std::endl << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for read one StringDouble: " << elapsedTime/NCYCLES << "ms" << std::endl << std::endl;
 
 	//-----------StringSeq--------------------------------------------------
 	Demo::StringSeq strs;
-	inizio = clock();
-	//popolo la sequenza di stringseq
-	for(Ice::Int i=0; i<100; ++i){
+	gettimeofday(&start, NULL);
+	//create the sequence of strings and insert into the db
+	for(Ice::Int i=0; i<NCYCLES; ++i){
 		strs.clear();
 		for (int k=0; k<Demo::StringSeqSize; k++)
 			strs.push_back("prova");
 		mapStr.insert(make_pair(i,strs));
 	}
-	fine = clock();
-	std::cout << "Scrittura 100 StringSeq: " << calcola_differenza(fine,inizio) << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for write one StringSeq: " << elapsedTime/NCYCLES << "ms" << std::endl;
 
-	//leggo il db dei stringseq
+	//read the stringseq's db
 	MapStringSeq::iterator p4;
-	inizio = clock();
+	gettimeofday(&start, NULL);
 	for(p4=mapStr.begin(); p4!=mapStr.end(); p4++)
 		Demo::StringSeq tmp = p4->second;
-	fine = clock();
-	std::cout << "Lettura 100 StringSeq: " << calcola_differenza(fine,inizio) << std::endl << std::endl;
+	gettimeofday(&stop, NULL);
+	elapsedTime = (stop.tv_sec - start.tv_sec) * 1000.0;
+	elapsedTime += (stop.tv_usec - start.tv_usec) / 1000.0;
+	std::cout << "Time for read one StringSeq: " << elapsedTime/NCYCLES << "ms" << std::endl << std::endl;
 }

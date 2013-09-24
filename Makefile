@@ -69,7 +69,7 @@ CXX      = g++
 #Insert the optional parameter to the compiler. The CFLAGS could be changed externally by the user
 CFLAGS   = -g 
 #Set INCPATH to add the inclusion paths
-INCPATH = -I./include  -I$(PACKETLIB)/include -L$(PACKETLIB)/lib -I$(ICEDIR)/include -L$(ICEDIR)/lib64 -lIce -lIceUtil -lFreeze
+INCPATH = -I./include  -I$(PACKETLIB)/include -L$(PACKETLIB)/lib -I$(ICEDIR)/include -L$(ICEDIR)/lib64 -lIce -lIceUtil -lFreeze -I/LOCAL_GTB/db5.3.21/include -L/LOCAL_GTB/db5.3.21/lib64 -ldb -ldb_cxx
 #Insert the implicit parameter to the compiler:
 ALL_CFLAGS = -fexceptions -Wall $(INCPATH) $(CFLAGS)
 ifeq ($(SYSTEM), QNX)
