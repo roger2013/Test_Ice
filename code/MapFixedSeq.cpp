@@ -1,18 +1,3 @@
-/***************************************************************************
-    begin                : Sep 21 2013
-    copyright            : (C) 2013 Mirko Montanari
-    email                : 57454@studenti.unimore.it
- ***************************************************************************/
-
-/***************************************************************************
- *                                                                         *
- *   This program is free software for non commercial purpose              *
- *   and for public research institutes; you can redistribute it and/or    *
- *   modify it under the terms of the GNU General Public License.          *
- *   For commercial purpose see appropriate license terms                  *
- *                                                                         *
- ***************************************************************************/
-
 // **********************************************************************
 //
 // Copyright (c) 2003-2013 ZeroC, Inc. All rights reserved.

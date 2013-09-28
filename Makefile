@@ -24,7 +24,7 @@ SHELL = /bin/sh
 #SYSTEM: linux or QNX
 SYSTEM = linux
 PROJECT= Test
-EXE_NAME = primo_milestone
+EXE_NAME = test_ice
 LIB_NAME = test_ice
 VER_FILE_NAME = version.h
 #the name of the directory where the conf file are copied (into $(datadir))

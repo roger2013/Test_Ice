@@ -1,4 +1,4 @@
-Primo progetto di prova con Ice/Freeze
+Test Ice/Freeze
 =====================================
 
 First test's project with Ice/Freeze
