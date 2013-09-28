@@ -23,4 +23,9 @@ double d;
 };
 sequence<Fixed> FixedSeq;
 
+sequence<float> FloatSeq;
+const int FloatSeqSize = 120;
+
+sequence<double> DoubleSeq;
+const int DoubleSeqSize = 240;
 };

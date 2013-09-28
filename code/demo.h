@@ -72,6 +72,14 @@ struct Fixed
 
 typedef ::std::vector< ::Demo::Fixed> FixedSeq;
 
+typedef ::std::vector< ::Ice::Float> FloatSeq;
+
+const ::Ice::Int FloatSeqSize = 120;
+
+typedef ::std::vector< ::Ice::Double> DoubleSeq;
+
+const ::Ice::Int DoubleSeqSize = 240;
+
 }
 
 namespace Ice
