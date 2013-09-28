@@ -165,7 +165,7 @@ void WriteReadDoubleSeq(MapDoubleSeq &mapDouble){
 	for(int k=0; k<Demo::FloatSeqSize; k++)
 		dSeq.push_back((Ice::Double)(k%256));
 	clock_gettime( CLOCK_MONOTONIC, &start);
-	/// create the sequence of float
+	/// create the sequence of double
 	for(Ice::Int i=0; i<NCYCLES; i++){
 		mapDouble.insert(make_pair(i,dSeq));
 	}
@@ -173,7 +173,7 @@ void WriteReadDoubleSeq(MapDoubleSeq &mapDouble){
 	double time = timediff(start, stop);
 	std::cout << "Write "<< NCYCLES <<" DoubleSeq: MB/s " << (float) (NCYCLES * Demo::DoubleSeqSize / time) / 1000000 << std::endl;
 
-	/// reade the float's db
+	/// reade the double's db
 	MapDoubleSeq::iterator p6;
 	Demo::DoubleSeq tmp;
 	clock_gettime( CLOCK_MONOTONIC, &start);
