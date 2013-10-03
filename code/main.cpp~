@@ -52,7 +52,7 @@ void WriteReadByteSeq(MapByteSeq &mapByte){
 	for(p1=mapByte.begin(); p1!=mapByte.end(); ++p1)
 		tmp = p1->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
+	double time = timediff(start, stop);
 	std::cout << "Read " << NCYCLES << " ByteSeq: MB/s " << (float) (NCYCLES * Demo::ByteSeqSize / time) / 1048576 << std::endl << std::endl;
 }
 
@@ -80,7 +80,7 @@ void WriteReadFixedSeq(MapFixedSeq &mapFixed){
 	for(p2=mapFixed.begin(); p2!=mapFixed.end(); ++p2)
 		Demo::Fixed tmp = p2->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
+	double time = timediff(start, stop);
 	std::cout << "Read " << NCYCLES << " FixedSeq: MB/s " << (float) (NCYCLES * (2*sizeof(int)+sizeof(double)) / time) / 1048576 << std::endl << std::endl;
 }
 
@@ -105,7 +105,7 @@ void WriteReadStringDouble(MapStringDouble &mapStrDo){
 	for(p3=mapStrDo.begin(); p3!=mapStrDo.end(); ++p3)
 		Demo::StringDouble tmp = p3->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
+	double time = timediff(start, stop);
 	std::cout << "Read " << NCYCLES << " StringDouble: MB/s " << (float) (NCYCLES * (5+sizeof(double)) / time) / 1048576 << std::endl << std::endl;
 }
 
@@ -130,7 +130,7 @@ void WriteReadStringSeq(MapStringSeq &mapStr){
 	for(p4=mapStr.begin(); p4!=mapStr.end(); p4++)
 		Demo::StringSeq tmp = p4->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
+	double time = timediff(start, stop);
 	std::cout << "Read " << NCYCLES << " StringSeq: MB/s " << (float) (NCYCLES * 5 * Demo::StringSeqSize / time) / 1048576 << std::endl << std::endl;
 }
 
@@ -156,7 +156,7 @@ void WriteReadFloatSeq(MapFloatSeq &mapFloat){
 	for(p5=mapFloat.begin(); p5!=mapFloat.end(); ++p5)
 		tmp = p5->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
+	double time = timediff(start, stop);
 	std::cout << "Read " << NCYCLES << " FloatSeq: MB/s " << (float) (NCYCLES * sizeof(float) * Demo::FloatSeqSize / time) / 1048576 << std::endl << std::endl;
 }
 
@@ -182,7 +182,7 @@ void WriteReadDoubleSeq(MapDoubleSeq &mapDouble){
 	for(p6=mapDouble.begin(); p6!=mapDouble.end(); ++p6)
 		tmp = p6->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
+	double time = timediff(start, stop);
 	std::cout << "Read " << NCYCLES << " DoubleSeq: MB/s " << (float) (NCYCLES * sizeof(double) * Demo::DoubleSeqSize / time) / 1048576 << std::endl << std::endl;
 }
 
