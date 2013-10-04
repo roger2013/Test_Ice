@@ -1,7 +1,6 @@
 #############################################################################
-# Makefile for building: Project name
-# Project:  Project name
-# Template: lib and exe
+# Project:  <project_name>
+# Template: exe lib version 2013-09-25
 # Use make variable_name=' options ' to override the variables or make -e to
 # override the file variables with the environment variables
 # 		make CFLAGS='-g' or make prefix='/usr'
@@ -21,11 +20,12 @@ SHELL = /bin/sh
 
 ####### 1) Project names and system
 
-#SYSTEM: linux or QNX
-SYSTEM = linux
-PROJECT= Test
+SYSTEM= $(shell gcc -dumpmachine)
+#ice, ctarta, mpi
+LINKERENV= ice
+PROJECT= test_ice
 EXE_NAME = test_ice
-LIB_NAME = test_ice
+LIB_NAME = <lib_name>
 VER_FILE_NAME = version.h
 #the name of the directory where the conf file are copied (into $(datadir))
 CONF_DEST_DIR =
@@ -64,24 +64,51 @@ ICON_DIR = ui
 
 ####### 4) Compiler, tools and options
 
+ifneq (, $(findstring mpi, $(LINKERENV)))
+CC       = mpic++
+else
 CC       = gcc
+endif
+
 CXX      = g++
+
+#Set INCPATH to add the inclusion paths
+INCPATH = -I $(INCLUDE_DIR) 
+LIBS = -lstdc++
+ifneq (, $(findstring ice, $(LINKERENV)))
+        INCPATH += -I$(ICEDIR)/include
+endif
+ifneq (, $(findstring ctarta, $(LINKERENV)))
+        INCPATH += -I$(CTARTA)/include
+	LIBS += -L$(CTARTA)/lib -lpacket -lRTAtelem
+endif
 #Insert the optional parameter to the compiler. The CFLAGS could be changed externally by the user
 CFLAGS   = -g 
-#Set INCPATH to add the inclusion paths
-INCPATH = -I./include  -I$(PACKETLIB)/include -L$(PACKETLIB)/lib -I$(ICEDIR)/include -L$(ICEDIR)/lib64 -lIce -lIceUtil -lFreeze -I/LOCAL_GTB/db5.3.21/include -L/LOCAL_GTB/db5.3.21/lib64 -ldb -ldb_cxx
 #Insert the implicit parameter to the compiler:
-ALL_CFLAGS = -fexceptions -Wall $(INCPATH) $(CFLAGS)
-ifeq ($(SYSTEM), QNX)
-	ALL_CFLAGS += -Vgcc_ntox86_gpp -lang-c++
-endif
+ALL_CFLAGS = -m64 -fexceptions -Wall $(CFLAGS) $(INCPATH)
 #Use CPPFLAGS for the preprocessor
-CPPFLAGS =  -m64 
+CPPFLAGS = 
 #Set LIBS for addition library
-LIBS = $(INCPATH) -lstdc++  #-lpacket
-ifeq ($(SYSTEM), QNX)
+
+ifneq (, $(findstring linux, $(SYSTEM)))
+ 	#Do linux things
+	ifneq (, $(findstring ice, $(LINKERENV)))
+		LIBS += -L$(ICEDIR)/lib64
+		LIBS += -lIce -lIceUtil -lFreeze
+	endif
+endif
+ifneq (, $(findstring qnx, $(SYSTEM)))
+    # Do qnx things
+	ALL_CFLAGS += -Vgcc_ntox86_gpp -lang-c++
 	LIBS += -lsocket
 endif
+ifneq (, $(findstring apple, $(SYSTEM)))
+ 	# Do apple things
+	ifneq (, $(findstring ice, $(LINKERENV)))
+		LIBS += -L$(ICEDIR)/lib
+                LIBS += -lZerocIce -lZerocIceUtil -lFreeze
+        endif
+endif 
 LINK     = g++
 #for link
 LFLAGS = -shared -Wl,-soname,$(TARGET1) -Wl,-rpath,$(DESTDIR)
@@ -136,7 +163,6 @@ $(shell  cut $(INCLUDE_DIR)/$(VER_FILE_NAME) -f 3 > version)
 %.o : %.c
 	$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -c $< -o $(OBJECTS_DIR)/$@
 
-
 #only for documentation generation
 $(DOXY_SOURCE_DIR)/%.h : %.h
 	cp  $<  $@
@@ -155,7 +181,7 @@ lib: staticlib
 	
 exe: makeobjdir $(OBJECTS)
 		test -d $(EXE_DESTDIR) || mkdir -p $(EXE_DESTDIR)
-		$(CC) $(CPPFLAGS) $(ALL_CFLAGS) -o $(EXE_DESTDIR)/$(EXE_NAME) $(OBJECTS_DIR)/*.o $(LIBS)
+		$(CC) $(CPPFLAGS) $(ALL_CFLAGS) $(LIBS) -o $(EXE_DESTDIR)/$(EXE_NAME) $(OBJECTS_DIR)/*.o
 	
 staticlib: makelibdir makeobjdir $(OBJECTS)	
 		test -d $(LIB_DESTDIR) || mkdir -p $(LIB_DESTDIR)	

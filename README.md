@@ -19,8 +19,9 @@ slice2freeze --dict name_map,type_key,type_value name_map optional_file_ice.ice
 
 for example:
 MapByteSeq: slice2freeze --dict MapByteSeq,int,Demo::ByteSeq MapByteSeq demo.ice
+MapFloatSeq: slice2freeze --dict MapFloatSeq,int,Demo::FloatSeq MapFloatSeq demo.ice
 MapDoubleSeq: slice2freeze --dict MapDoubleSeq,int,Demo::DoubleSeq MapDoubleSeq demo.ice
-MapFixedSeq: slice2freeze --dict MapFixedSeq,intDemo::Fixed MapFixedSeq demo.ice
+MapFixedSeq: slice2freeze --dict MapFixedSeq,int,Demo::Fixed MapFixedSeq demo.ice
 MapFloatSeq: slice2freeze --dict MapFloatSeq,int,Demo::FloatSeq MapFloatSeq demo.ice
 MapStringDouble: slice2freeze --dict MapStringDouble,int,Demo::StringDouble MapStringDouble demo.ice
 MapStringSeq: slice2freeze --dict MapStringSeq,int,Demo::StringSeq MapStringSeq demo.ice
