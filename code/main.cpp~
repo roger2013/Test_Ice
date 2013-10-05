@@ -240,7 +240,7 @@ int main(int argc, char* argv[]){
 		mapFloat.clear();
 		mapDouble.clear();
 		WriteByteSeq(mapByte);
-		WriteReadFixedSeq(mapFixed);
+		//WriteReadFixedSeq(mapFixed);
 		//WriteReadStringDouble(mapStrDo);
 		//WriteReadStringSeq(mapStr);
 		WriteFloatSeq(mapFloat);
