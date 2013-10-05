@@ -145,7 +145,7 @@ void WriteReadStringSeq(MapStringSeq &mapStr){
 void WriteFloatSeq(MapFloatSeq &mapFloat){
 	Demo::FloatSeq fSeq;
 	for(int k=0; k<Demo::FloatSeqSize; k++)
-		fSeq.push_back((Ice::Float)(k%256));
+		fSeq.push_back((Ice::Float)k);
 	clock_gettime( CLOCK_MONOTONIC, &start);
 	/// create the sequence of float
 	for(Ice::Int i=0; i<NCYCLES; i++){
@@ -159,7 +159,7 @@ void WriteFloatSeq(MapFloatSeq &mapFloat){
 
 void ReadFloatSeq(MapFloatSeq &mapFloat){
 
-	/// reade the float's db
+	/// read the float's db
 	MapFloatSeq::iterator p5;
 	Demo::FloatSeq tmp;
 	long ncycread = 0;
@@ -225,26 +225,26 @@ int main(int argc, char* argv[]){
 	
 	/// initialize the maps
 	MapByteSeq mapByte(connection, "ByteSeq");
-	mapByte.clear();
 	MapFixedSeq mapFixed(connection, "FixedSeq");
-	mapFixed.clear();
 	MapStringDouble mapStrDo(connection, "StringDouble");
-	mapStrDo.clear();
 	MapStringSeq mapStr(connection, "StringSeq");
-	mapStr.clear();
 	MapFloatSeq mapFloat(connection, "FloatSeq");
-	mapFloat.clear();
 	MapDoubleSeq mapDouble(connection, "DoubleSeq");
-	mapDouble.clear();
 
 	/// write and read the datas int the db
 	if(operation == 0) {
+		mapByte.clear();
+		mapFixed.clear();
+		mapStrDo.clear();
+		mapStr.clear();
+		mapFloat.clear();
+		mapDouble.clear();
 		WriteByteSeq(mapByte);
 		//WriteReadFixedSeq(mapFixed);
 		//WriteReadStringDouble(mapStrDo);
 		//WriteReadStringSeq(mapStr);
 		WriteFloatSeq(mapFloat);
-		WriteReadDoubleSeq(mapDouble);
+		//WriteReadDoubleSeq(mapDouble);
 	}
 	if(operation == 1) {
 		ReadByteSeq(mapByte);
@@ -257,11 +257,12 @@ int main(int argc, char* argv[]){
 	std::cout << "Total time: " << time << std::endl << std::endl;
 
 	/// search a value of index x
-	std::cout << "Insert the index to view from FixedSeq: ";
+	std::cout << "Insert the index to view from Fixed: ";
 	string s;
 	std::cin >> s;
 	int index = atoi(s.c_str());
-	MapFixedSeq::iterator p = mapFixed.find(index);
+	MapFixedSeq::iterator p;
+	p = mapFixed.find(index);
 	std::cout << p->second.i << "\t" << p->second.j << "\t" << p->second.d << std::endl;
 
 	/// view record max to i from FixedSeq
