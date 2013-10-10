@@ -30,7 +30,7 @@ using namespace std;
 struct timespec start, stop;
 struct timespec startg, stopg;
 
-/// write and read the sequence of ByteSeq
+/// write the sequence of ByteSeq
 /// \param[in] mapByte is the map of ByteSeq
 void WriteByteSeq(MapByteSeq &mapByte){
 	Demo::ByteSeq bSeq;
@@ -46,6 +46,8 @@ void WriteByteSeq(MapByteSeq &mapByte){
 	std::cout << "Write "<< NCYCLES <<" ByteSeq: MB/s " << (float) (NCYCLES * Demo::ByteSeqSize / time) / 1048576 << std::endl;
 }
 
+/// read the sequence of ByteSeq
+/// \param[in] mapByte is the map of ByteSeq
 void ReadByteSeq(MapByteSeq &mapByte){
 	/// reade the byte's db
 	MapByteSeq::iterator p1;
@@ -58,13 +60,13 @@ void ReadByteSeq(MapByteSeq &mapByte){
 	}
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
-	std::cout << "Read " << ncycread << " ByteSeq: MB/s " << (float) (ncycread * Demo::ByteSeqSize / time) / 1048576 << std::endl << std::endl;
+	std::cout << "Read " << ncycread << " ByteSeq: MB/s " << (float) (ncycread * Demo::ByteSeqSize / time) / 1048576 << std::endl;
 
 }
 
-/// write and read the FixedSeq
+/// write the FixedSeq
 /// \param[in] mapFixed is the map of FixedSeq
-void WriteReadFixedSeq(MapFixedSeq &mapFixed){
+void WriteFixedSeq(MapFixedSeq &mapFixed){
 	Demo::Fixed fix[NCYCLES];
 	for(Ice::Int i=0; i<NCYCLES; ++i){
 		fix[i].i = i;
@@ -79,20 +81,24 @@ void WriteReadFixedSeq(MapFixedSeq &mapFixed){
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
 	std::cout << "Write " << NCYCLES << " FixedSeq: MB/s " << (float) (NCYCLES * (2*sizeof(int)+sizeof(double)) / time) / 1048576 << std::endl;
+}
 
+/// read the FixedSeq
+/// \param[in] mapFixed is the map of FixedSeq
+void ReadFixedSeq(MapFixedSeq &mapFixed){
 	/// read the fixed's db
 	MapFixedSeq::iterator p2;
 	clock_gettime( CLOCK_MONOTONIC, &start);
 	for(p2=mapFixed.begin(); p2!=mapFixed.end(); ++p2)
 		Demo::Fixed tmp = p2->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
-	std::cout << "Read " << NCYCLES << " FixedSeq: MB/s " << (float) (NCYCLES * (2*sizeof(int)+sizeof(double)) / time) / 1048576 << std::endl << std::endl;
+	double time = timediff(start, stop);
+	std::cout << "Read " << NCYCLES << " FixedSeq: MB/s " << (float) (NCYCLES * (2*sizeof(int)+sizeof(double)) / time) / 1048576 << std::endl;
 }
 
-/// write and read the sequence of StringDouble
+/// write the sequence of StringDouble
 /// \param[in] mapStrDo is the map of StringDouble
-void WriteReadStringDouble(MapStringDouble &mapStrDo){
+void WriteStringDouble(MapStringDouble &mapStrDo){
 	Demo::StringDouble strdo;
 	strdo.s = "prova";
 	strdo.d = (Ice::Double)13;
@@ -104,20 +110,24 @@ void WriteReadStringDouble(MapStringDouble &mapStrDo){
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
 	std::cout << "Write " << NCYCLES << " StringDouble: MB/s " << (float) (NCYCLES * (5+sizeof(double)) / time) / 1048576 << std::endl;
+}
 
+/// read the sequence of StringDouble
+/// \param[in] mapStrDo is the map of StringDouble
+void ReadStringDouble(MapStringDouble &mapStrDo){
 	/// reade the stringdouble db
 	MapStringDouble::iterator p3;
 	clock_gettime( CLOCK_MONOTONIC, &start);
 	for(p3=mapStrDo.begin(); p3!=mapStrDo.end(); ++p3)
 		Demo::StringDouble tmp = p3->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
-	std::cout << "Read " << NCYCLES << " StringDouble: MB/s " << (float) (NCYCLES * (5+sizeof(double)) / time) / 1048576 << std::endl << std::endl;
+	double time = timediff(start, stop);
+	std::cout << "Read " << NCYCLES << " StringDouble: MB/s " << (float) (NCYCLES * (5+sizeof(double)) / time) / 1048576 << std::endl;
 }
 
-/// write and read the sequence of String
+/// read the sequence of String
 /// \param[in] mapStr is the map of the String
-void WriteReadStringSeq(MapStringSeq &mapStr){
+void WriteStringSeq(MapStringSeq &mapStr){
 	Demo::StringSeq strs;
 	for (int k=0; k<Demo::StringSeqSize; k++)
 		strs.push_back("prova");
@@ -129,18 +139,22 @@ void WriteReadStringSeq(MapStringSeq &mapStr){
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
 	std::cout << "Write " << NCYCLES << " StringSeq: MB/s " << (float) (NCYCLES * 5 * Demo::StringSeqSize / time) / 1048576 << std::endl;
+}
 
+/// read the sequence of String
+/// \param[in] mapStr is the map of the String
+void ReadStringSeq(MapStringSeq &mapStr){
 	/// read the stringseq's db
 	MapStringSeq::iterator p4;
 	clock_gettime( CLOCK_MONOTONIC, &start);
 	for(p4=mapStr.begin(); p4!=mapStr.end(); p4++)
 		Demo::StringSeq tmp = p4->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
-	std::cout << "Read " << NCYCLES << " StringSeq: MB/s " << (float) (NCYCLES * 5 * Demo::StringSeqSize / time) / 1048576 << std::endl << std::endl;
+	double time = timediff(start, stop);
+	std::cout << "Read " << NCYCLES << " StringSeq: MB/s " << (float) (NCYCLES * 5 * Demo::StringSeqSize / time) / 1048576 << std::endl;
 }
 
-/// write and read a sequence of float
+/// write a sequence of float
 /// \param[in] mapFloat is a map of float sequence
 void WriteFloatSeq(MapFloatSeq &mapFloat){
 	Demo::FloatSeq fSeq;
@@ -154,11 +168,11 @@ void WriteFloatSeq(MapFloatSeq &mapFloat){
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
 	std::cout << "Write "<< NCYCLES <<" FloatSeq: MB/s " << (float) (NCYCLES * sizeof(float) * Demo::FloatSeqSize / time) / 1048576 << std::endl;
-
 }
 
+/// read a sequence of float
+/// \param[in] mapFloat is a map of float sequence
 void ReadFloatSeq(MapFloatSeq &mapFloat){
-
 	/// read the float's db
 	MapFloatSeq::iterator p5;
 	Demo::FloatSeq tmp;
@@ -170,13 +184,13 @@ void ReadFloatSeq(MapFloatSeq &mapFloat){
 	}
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
-	std::cout << "Read " << ncycread << " FloatSeq: MB/s " << (float) (ncycread * sizeof(float) * Demo::FloatSeqSize / time) / 1048576 << std::endl << std::endl;
+	std::cout << "Read " << ncycread << " FloatSeq: MB/s " << (float) (ncycread * sizeof(float) * Demo::FloatSeqSize / time) / 1048576 << std::endl;
 }
 
 
-/// write and read a double sequence
+/// write a double sequence
 /// \param[in] mapDouble is a map of double db sequence
-void WriteReadDoubleSeq(MapDoubleSeq &mapDouble){
+void WriteDoubleSeq(MapDoubleSeq &mapDouble){
 	Demo::DoubleSeq dSeq;
 	for(int k=0; k<Demo::FloatSeqSize; k++)
 		dSeq.push_back((Ice::Double)(k%256));
@@ -188,7 +202,11 @@ void WriteReadDoubleSeq(MapDoubleSeq &mapDouble){
 	clock_gettime( CLOCK_MONOTONIC, &stop);
 	double time = timediff(start, stop);
 	std::cout << "Write "<< NCYCLES <<" DoubleSeq: MB/s " << (float) (NCYCLES * sizeof(double) * Demo::DoubleSeqSize / time) / 1048576 << std::endl;
+}
 
+/// read a double sequence
+/// \param[in] mapDouble is a map of double db sequence
+void ReadDoubleSeq(MapDoubleSeq &mapDouble){
 	/// reade the double's db
 	MapDoubleSeq::iterator p6;
 	Demo::DoubleSeq tmp;
@@ -196,18 +214,18 @@ void WriteReadDoubleSeq(MapDoubleSeq &mapDouble){
 	for(p6=mapDouble.begin(); p6!=mapDouble.end(); ++p6)
 		tmp = p6->second;
 	clock_gettime( CLOCK_MONOTONIC, &stop);
-	time = timediff(start, stop);
-	std::cout << "Read " << NCYCLES << " DoubleSeq: MB/s " << (float) (NCYCLES * sizeof(double) * Demo::DoubleSeqSize / time) / 1048576 << std::endl << std::endl;
+	double time = timediff(start, stop);
+	std::cout << "Read " << NCYCLES << " DoubleSeq: MB/s " << (float) (NCYCLES * sizeof(double) * Demo::DoubleSeqSize / time) / 1048576 << std::endl;
 }
 
 int main(int argc, char* argv[]){
 	if(argc != 2) {
-			cerr << "Please, provide the operation 0 (write) or 1 (read)" << endl;
+			cerr << "Please, provide the operation 0 (write), 1 (read), 2 (clear map) or 3 (query db)" << endl;
 			return 0;
 	}
 
-	bool operation = atoi(argv[1]);
-	cout << "operation: " << operation << endl;
+	int operation = atoi(argv[1]);
+	cout << "operation: ";
 
 	/// start clock
 	clock_gettime( CLOCK_MONOTONIC, &startg);
@@ -231,24 +249,55 @@ int main(int argc, char* argv[]){
 	MapFloatSeq mapFloat(connection, "FloatSeq");
 	MapDoubleSeq mapDouble(connection, "DoubleSeq");
 
-	/// write and read the datas int the db
-	if(operation == 0) {
-		mapByte.clear();
-		mapFixed.clear();
-		mapStrDo.clear();
-		mapStr.clear();
-		mapFloat.clear();
-		mapDouble.clear();
-		WriteByteSeq(mapByte);
-		WriteReadFixedSeq(mapFixed);
-		//WriteReadStringDouble(mapStrDo);
-		//WriteReadStringSeq(mapStr);
-		WriteFloatSeq(mapFloat);
-		//WriteReadDoubleSeq(mapDouble);
-	}
-	if(operation == 1) {
-		ReadByteSeq(mapByte);
-		ReadFloatSeq(mapFloat);
+	/// select the operation
+	switch(operation){
+		case 0:
+			cout << "write" << endl;
+			WriteByteSeq(mapByte);
+			WriteFixedSeq(mapFixed);
+			WriteStringDouble(mapStrDo);
+			WriteStringSeq(mapStr);
+			WriteFloatSeq(mapFloat);
+			WriteDoubleSeq(mapDouble);
+			break;
+		case 1:
+			cout << "read" << endl;
+			ReadByteSeq(mapByte);
+			ReadFixedSeq(mapFixed);
+			ReadStringDouble(mapStrDo);
+			ReadStringSeq(mapStr);
+			ReadFloatSeq(mapFloat);
+			ReadDoubleSeq(mapDouble);
+			break;
+		case 2:
+			cout << "clear maps" << endl;
+			mapByte.clear();
+			mapFixed.clear();
+			mapStrDo.clear();
+			mapStr.clear();
+			mapFloat.clear();
+			mapDouble.clear();
+			break;
+		case 3:
+			cout << "query db" << endl;
+			/// search a value of index x
+			std::cout << "Insert the index to view from Fixed: ";
+			string s;
+			std::cin >> s;
+			int index = atoi(s.c_str());
+			MapFixedSeq::iterator p;
+			p = mapFixed.find(index);
+			std::cout << p->second.i << "\t" << p->second.j << "\t" << p->second.d << std::endl;
+
+			/// view record max to i from FixedSeq
+			std::cout <<"Insert value of 'i': ";
+			std::cin >> s;
+			int val = atoi(s.c_str());
+			for(p=mapFixed.begin(); p!=mapFixed.end(); p++){
+				if(p->second.i > val)
+					std::cout << p->second.i << "\t" << p->second.j << "\t" << p->second.d << std::endl;
+			}
+			break;
 	}
 
 	/// stop the clock
@@ -256,22 +305,5 @@ int main(int argc, char* argv[]){
 	double time = timediff(startg, stopg);
 	std::cout << "Total time: " << time << std::endl << std::endl;
 
-	/// search a value of index x
-	std::cout << "Insert the index to view from Fixed: ";
-	string s;
-	std::cin >> s;
-	int index = atoi(s.c_str());
-	MapFixedSeq::iterator p;
-	p = mapFixed.find(index);
-	std::cout << p->second.i << "\t" << p->second.j << "\t" << p->second.d << std::endl;
-
-	/// view record max to i from FixedSeq
-	std::cout <<"Insert value of 'i': ";
-	std::cin >> s;
-	int val = atoi(s.c_str());
-	for(p=mapFixed.begin(); p!=mapFixed.end(); p++){
-		if(p->second.i > val)
-			std::cout << p->second.i << "\t" << p->second.j << "\t" << p->second.d << std::endl;
-	}
 	return 0;
 }
