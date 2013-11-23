@@ -25,3 +25,6 @@ MapFixedSeq: slice2freeze --dict MapFixedSeq,int,Demo::Fixed MapFixedSeq demo.ic
 MapFloatSeq: slice2freeze --dict MapFloatSeq,int,Demo::FloatSeq MapFloatSeq demo.ice
 MapStringDouble: slice2freeze --dict MapStringDouble,int,Demo::StringDouble MapStringDouble demo.ice
 MapStringSeq: slice2freeze --dict MapStringSeq,int,Demo::StringSeq MapStringSeq demo.ice
+
+If you use an database BerkeleyDB in memory, you must use this command before start the program:
+sudo mount tmpfs -t tmpfs db
