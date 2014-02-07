@@ -27,5 +27,97 @@ sequence<float> FloatSeq;
 const int FloatSeqSize = 120;
 
 sequence<double> DoubleSeq;
-const int DoubleSeqSize = 240;
+const int DoubleSeqSize = 120;
+
+
+class UserDataT
+{
+string username;
+double ru;
 };
+
+class complexKey
+
+{
+
+double time;
+
+double ra;
+
+float dec;
+
+float energy;
+
+};
+
+sequence< complexKey > ComplexKeySeq;
+const int ComplexSeqSize = 120;
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

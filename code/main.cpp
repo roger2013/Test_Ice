@@ -263,11 +263,11 @@ int main(int argc, char* argv[]){
 		case 1:
 			cout << "read" << endl;
 			ReadByteSeq(mapByte);
-			ReadFixedSeq(mapFixed);
-			ReadStringDouble(mapStrDo);
-			ReadStringSeq(mapStr);
-			ReadFloatSeq(mapFloat);
-			ReadDoubleSeq(mapDouble);
+			///ReadFixedSeq(mapFixed);
+			///ReadStringDouble(mapStrDo);
+			///ReadStringSeq(mapStr);
+			///ReadFloatSeq(mapFloat);
+			///ReadDoubleSeq(mapDouble);
 			break;
 		case 2:
 			cout << "clear maps" << endl;
